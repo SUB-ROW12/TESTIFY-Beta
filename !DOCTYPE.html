@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TESTIFY Beta | Testing Environment</title>
+    <title>TESTIFY Beta | Trusted Evaluation, Security, & Testing Infrastructure for Youth</title>
     <style>
         :root {
             --bg-base: #060b1e;
-            --surface: rgba(15, 23, 42, 0.78);
-            --card-border: rgba(56, 189, 248, 0.3);
+            --surface: rgba(15, 23, 42, 0.82);
+            --card-border: rgba(56, 189, 248, 0.35);
             --primary: #0ea5e9;
             --cyan: #38bdf8;
             --indigo: #6366f1;
@@ -25,9 +25,9 @@
         body {
             background-color: var(--bg-base);
             background-image: 
-                radial-gradient(circle at 10% 20%, rgba(14, 165, 233, 0.18) 0%, transparent 40%),
-                radial-gradient(circle at 90% 80%, rgba(168, 85, 247, 0.18) 0%, transparent 40%),
-                radial-gradient(circle at 50% 50%, rgba(99, 102, 241, 0.12) 0%, transparent 60%);
+                radial-gradient(circle at 10% 20%, rgba(14, 165, 233, 0.2) 0%, transparent 40%),
+                radial-gradient(circle at 90% 80%, rgba(168, 85, 247, 0.2) 0%, transparent 40%),
+                radial-gradient(circle at 50% 50%, rgba(99, 102, 241, 0.15) 0%, transparent 60%);
             color: var(--text);
             min-height: 100vh;
             display: flex;
@@ -44,7 +44,7 @@
         }
 
         header {
-            background: rgba(7, 13, 29, 0.85);
+            background: rgba(7, 13, 29, 0.9);
             backdrop-filter: blur(20px);
             padding: 16px 32px;
             display: flex;
@@ -52,39 +52,54 @@
             align-items: center;
             border-bottom: 1px solid var(--card-border);
             position: sticky; top: 0; z-index: 100;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
         }
 
         .brand-wrap { display: flex; align-items: center; gap: 16px; }
+        
         .artistic-logo {
-            width: 46px; height: 46px; border-radius: 14px;
+            width: 50px; height: 50px; border-radius: 14px;
             background: linear-gradient(135deg, var(--cyan), var(--indigo), var(--purple));
             display: flex; align-items: center; justify-content: center;
-            font-weight: 900; font-size: 1.3rem; color: white;
+            position: relative; overflow: hidden;
+            box-shadow: 0 0 30px rgba(56, 189, 248, 0.6), inset 0 0 15px rgba(255, 255, 255, 0.4);
+            animation: logoPulse 3.5s ease-in-out infinite alternate;
+        }
+        @keyframes logoPulse {
+            0% { box-shadow: 0 0 20px rgba(56, 189, 248, 0.4), inset 0 0 10px rgba(255, 255, 255, 0.3); transform: scale(1); }
+            100% { box-shadow: 0 0 35px rgba(168, 85, 247, 0.8), inset 0 0 20px rgba(255, 255, 255, 0.6); transform: scale(1.04); }
+        }
+        .artistic-logo::before {
+            content: ''; position: absolute; inset: 2px; border-radius: 12px;
+            background: linear-gradient(135deg, #090d1f, #18153d);
+        }
+        .logo-symbol {
+            position: relative; z-index: 2; font-weight: 900; font-size: 1.4rem;
+            background: linear-gradient(135deg, var(--cyan), #ffffff, var(--purple));
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
         }
 
-        header h1 { font-size: 1.5rem; letter-spacing: 2px; color: #fff; font-weight: 800; display: flex; align-items: baseline; gap: 10px; }
-        
-        /* Sleek, italic, very curvy and wavy calligraphy for 'Beta' */
+        header h1 { font-size: 1.55rem; letter-spacing: 1.5px; color: #fff; font-weight: 800; display: flex; align-items: baseline; gap: 10px; text-shadow: 0 0 20px rgba(56,189,248,0.3); }
+        header p { font-size: 0.72rem; color: var(--cyan); letter-spacing: 0.5px; font-weight: 600; text-transform: uppercase; }
+
         .beta-calligraphy {
             font-family: 'Brush Script MT', 'Lucida Handwriting', cursive, sans-serif;
             font-style: italic;
             font-weight: 400;
-            font-size: 1.3rem;
+            font-size: 1.35rem;
             background: linear-gradient(135deg, #f43f5e, #fbbf24, #a855f7);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            letter-spacing: 1px;
+            letter-spacing: 1.5px;
             display: inline-block;
-            transform: rotate(-5deg);
-            filter: drop-shadow(0 0 8px rgba(244, 63, 94, 0.4));
-            animation: waveBeta 3s ease-in-out infinite alternate;
+            transform: rotate(-6deg);
+            filter: drop-shadow(0 0 10px rgba(244, 63, 94, 0.5));
+            animation: waveBeta 2.8s ease-in-out infinite alternate;
         }
         @keyframes waveBeta {
-            0% { transform: rotate(-6deg) translateY(0px); }
-            100% { transform: rotate(-2deg) translateY(-2px); }
+            0% { transform: rotate(-7deg) translateY(0px) scale(1); }
+            100% { transform: rotate(-2deg) translateY(-3px) scale(1.05); }
         }
-
-        header p { font-size: 0.72rem; color: var(--cyan); letter-spacing: 0.5px; font-weight: 600; text-transform: uppercase; }
 
         .status-pill {
             background: rgba(16, 185, 129, 0.15);
@@ -93,11 +108,12 @@
             padding: 6px 14px; border-radius: 30px;
             font-size: 0.78rem; font-weight: 600;
             display: flex; align-items: center; gap: 8px;
+            box-shadow: 0 0 15px rgba(16, 185, 129, 0.2);
         }
         .pulse-dot { width: 7px; height: 7px; border-radius: 50%; background: #34d399; animation: blink 1.5s infinite; }
         @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
 
-        .container { max-width: 700px; width: 94%; margin: 32px auto; flex: 1; z-index: 2; }
+        .container { max-width: 740px; width: 94%; margin: 32px auto; flex: 1; z-index: 2; }
         .view { display: none; }
         .view.active { display: block; animation: fadeIn 0.4s ease; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
@@ -112,8 +128,8 @@
             box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
         }
 
-        .grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
-        .grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; }
+        .grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(290px, 1fr)); gap: 22px; }
+        .grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 16px; }
 
         h2 { font-size: 1.35rem; margin-bottom: 6px; color: #fff; font-weight: 700; }
         h3 { font-size: 1.05rem; margin-bottom: 14px; color: var(--cyan); border-bottom: 1px solid rgba(255,255,255,0.08); padding-bottom: 8px; }
@@ -123,9 +139,10 @@
         label { display: block; font-size: 0.8rem; font-weight: 600; color: #cbd5e1; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.6px; }
         input, select {
             width: 100%; padding: 12px 16px;
-            background: rgba(15, 23, 42, 0.75);
+            background: rgba(15, 23, 42, 0.8);
             border: 1px solid rgba(148, 163, 184, 0.3);
             border-radius: 12px; color: white; font-size: 0.95rem;
+            transition: 0.2s;
         }
         input:focus, select:focus { outline: none; border-color: var(--cyan); box-shadow: 0 0 15px rgba(56, 189, 248, 0.25); }
 
@@ -133,8 +150,13 @@
         .pass-container input { padding-right: 48px; }
         .pass-toggle-btn {
             position: absolute; right: 12px; top: 50%; transform: translateY(-50%);
-            background: none; border: none; cursor: pointer; color: var(--muted); padding: 4px;
+            background: none; border: none; cursor: pointer; color: var(--muted);
+            display: flex; align-items: center; justify-content: center; padding: 4px;
         }
+
+        .mobile-input-wrap { display: flex; align-items: center; background: rgba(15, 23, 42, 0.8); border: 1px solid rgba(148, 163, 184, 0.3); border-radius: 12px; overflow: hidden; }
+        .mobile-prefix { padding: 12px 14px; background: rgba(56, 189, 248, 0.1); color: var(--cyan); font-weight: 700; border-right: 1px solid rgba(148, 163, 184, 0.3); font-size: 0.95rem; }
+        .mobile-input-wrap input { border: none; background: transparent; border-radius: 0; box-shadow: none !important; }
 
         .btn {
             padding: 12px 22px; border: none; border-radius: 12px;
@@ -143,7 +165,7 @@
             transition: 0.25s;
         }
         .btn:hover { transform: translateY(-2px); filter: brightness(1.1); }
-        .btn-primary { background: linear-gradient(135deg, var(--primary), var(--indigo)); color: white; width: 100%; }
+        .btn-primary { background: linear-gradient(135deg, var(--primary), var(--indigo)); color: white; width: 100%; box-shadow: 0 8px 25px rgba(14, 165, 233, 0.35); }
         .btn-success { background: linear-gradient(135deg, #059669, #10b981); color: white; }
         .btn-danger { background: linear-gradient(135deg, #be123c, #f43f5e); color: white; }
         .btn-purple { background: linear-gradient(135deg, #7c3aed, #8b5cf6); color: white; }
@@ -152,7 +174,7 @@
         .slip-box { border: 1px solid var(--cyan); background: rgba(56, 189, 248, 0.05); padding: 22px; border-radius: 14px; margin-bottom: 18px; }
         .slip-table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 0.9rem; }
         .slip-table td, .slip-table th { border: 1px solid rgba(255,255,255,0.1); padding: 10px 14px; text-align: left; }
-        .slip-table th { background: rgba(255,255,255,0.04); color: var(--cyan); width: 40%; }
+        .slip-table th { background: rgba(255,255,255,0.04); color: var(--cyan); width: 42%; }
 
         .exam-top {
             background: #0b1329; border: 1px solid rgba(56, 189, 248, 0.3);
@@ -160,8 +182,8 @@
             display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 12px;
         }
         .timer { font-size: 1.2rem; font-weight: 800; color: #fb7185; background: rgba(244, 63, 94, 0.12); padding: 8px 16px; border-radius: 10px; border: 1px solid rgba(244, 63, 94, 0.35); }
-        .exam-body { display: grid; grid-template-columns: 1fr 320px; gap: 22px; }
-        @media (max-width: 900px) { .exam-body { grid-template-columns: 1fr; } }
+        .exam-body { display: grid; grid-template-columns: 1fr 330px; gap: 22px; }
+        @media (max-width: 920px) { .exam-body { grid-template-columns: 1fr; } }
 
         .q-box {
             background: #0b1329; border: 1px solid rgba(56, 189, 248, 0.3); border-radius: 16px;
@@ -192,8 +214,19 @@
             font-size: 0.75rem;
             font-family: monospace;
             color: #38bdf8;
-            max-height: 120px;
+            max-height: 150px;
             overflow-y: auto;
+        }
+
+        .sensor-badge {
+            background: rgba(16, 185, 129, 0.15);
+            border: 1px solid var(--success);
+            color: #34d399;
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            text-transform: uppercase;
         }
 
         #securityModal { position: fixed; inset: 0; background: rgba(6, 11, 30, 0.92); backdrop-filter: blur(8px); display: none; align-items: center; justify-content: center; z-index: 9999; padding: 20px; }
@@ -206,13 +239,13 @@
 
 <header>
     <div class="brand-wrap">
-        <div class="artistic-logo">T</div>
+        <div class="artistic-logo"><span class="logo-symbol">T</span></div>
         <div>
             <h1>TESTIFY <span class="beta-calligraphy">Beta</span></h1>
-            <p>Testing Environment</p>
+            <p>Trusted Evaluation, Security, & Testing Infrastructure for Youth</p>
         </div>
     </div>
-    <div class="status-pill"><span class="pulse-dot"></span> BETA MODE ACTIVE</div>
+    <div class="status-pill"><span class="pulse-dot"></span> BETA MODE ONLINE</div>
 </header>
 
 <div class="container">
@@ -221,102 +254,90 @@
     <div id="view-home" class="view active">
         <div class="card">
             <h2>Candidate Access Portal</h2>
-            <p class="sub">Enter your simple Application Number and Passkey.</p>
-            <div class="form-group"><label>Application Number</label><input type="text" id="loginAppNo" value="1001" placeholder="e.g., 1001"></div>
+            <p class="sub">Enter your Application Number and Passkey.</p>
+            <div class="form-group"><label>Application Number</label><input type="text" id="loginAppNo" placeholder="Enter Application Number"></div>
             <div class="form-group">
                 <label>Passkey</label>
                 <div class="pass-container">
-                    <input type="password" id="loginPass" value="pass123" placeholder="Enter passkey">
-                    <button type="button" class="pass-toggle-btn" onclick="togglePasswordVisibility('loginPass', this)" title="Toggle Password Visibility">👁️</button>
+                    <input type="password" id="loginPass" placeholder="Enter Passkey">
+                    <button type="button" class="pass-toggle-btn" onclick="togglePasswordVisibility('loginPass', this)" title="Toggle Visibility">👁️</button>
                 </div>
             </div>
-            <button class="btn btn-primary" onclick="candidateLogin()">Access Portal &rarr;</button>
+            <button type="button" class="btn btn-primary" onclick="candidateLogin()">Access Portal &rarr;</button>
             <hr style="margin: 24px 0; border:0; border-top:1px solid rgba(255,255,255,0.08);">
             <p style="font-size:0.9rem; margin-bottom:12px; color:#cbd5e1;"><strong>New Aspirant?</strong></p>
-            <button class="btn btn-outline" style="width:100%;" onclick="switchView('view-register')">Begin Registration &rarr;</button>
+            <button type="button" class="btn btn-outline" style="width:100%;" onclick="openRegistration()">Begin Registration &rarr;</button>
         </div>
     </div>
 
     <!-- VIEW 2: REGISTRATION -->
-    <div id="view-register" class="view" style="max-width: 900px;">
+    <div id="view-register" class="view" style="max-width: 920px;">
         <div class="card">
             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
-                <h2>TESTIFY — Candidate Registration</h2>
-                <button class="btn btn-outline" onclick="switchView('view-home')">&larr; Back</button>
+                <h2>TESTIFY Beta — Candidate Registration</h2>
+                <button type="button" class="btn btn-outline" onclick="switchView('view-home')">&larr; Back</button>
             </div>
-            <p class="sub">Dummy registration form with simple credentials.</p>
+            <p class="sub">All fields are mandatory. Names must follow Title Case format (First letter capital, rest small).</p>
 
-            <div style="margin-bottom: 20px; background: rgba(251, 191, 36, 0.08); border: 1px dashed var(--warning); padding: 14px; border-radius: 12px; display: flex; justify-content: space-between; align-items: center;">
-                <div>
-                    <strong style="color: var(--warning); font-size: 0.9rem;">🛠️ Quick Dummy Fill</strong>
-                    <p style="font-size: 0.78rem; color: var(--muted);">Instantly fill sample data for quick testing.</p>
-                </div>
-                <button type="button" class="btn" style="background: var(--warning); color: #000; font-weight: 700; padding: 8px 16px;" onclick="devQuickFill()">⚡ Quick Fill</button>
-            </div>
-
+            <h3>1. Personal & Identity Particulars</h3>
             <div class="grid-3">
-                <div class="form-group"><label>Full Name *</label><input type="text" id="regName" value="Subrata Paul"></div>
-                <div class="form-group"><label>Father's Name *</label><input type="text" id="regFather" value="Sanjay Paul"></div>
-                <div class="form-group"><label>Mother's Name *</label><input type="text" id="regMother" value="Ranu Paul"></div>
-                <div class="form-group"><label>Date of Birth *</label><input type="date" id="regDob" value="2008-01-01"></div>
-                <div class="form-group">
-                    <label>Gender *</label>
-                    <select id="regGender">
-                        <option value="Male" selected>Male</option>
-                        <option value="Female">Female</option>
-                    </select>
-                </div>
+                <div class="form-group"><label>Candidate Name *</label><input type="text" id="regName" placeholder="e.g. Aarav Sharma"></div>
+                <div class="form-group"><label>Father's Name *</label><input type="text" id="regFather" placeholder="e.g. Sanjay Sharma"></div>
+                <div class="form-group"><label>Mother's Name *</label><input type="text" id="regMother" placeholder="e.g. Sunita Sharma"></div>
+                <div class="form-group"><label>Date of Birth *</label><input type="date" id="regDob"></div>
                 <div class="form-group">
                     <label>Category *</label>
                     <select id="regCategory">
-                        <option value="GENERAL" selected>General</option>
+                        <option value="">-- Select Category --</option>
+                        <option value="General">General</option>
                         <option value="OBC">OBC</option>
+                        <option value="SC">SC</option>
+                        <option value="ST">ST</option>
                     </select>
                 </div>
-                <div class="form-group"><label>ID No. *</label><input type="text" id="regAadhaar" value="123456789012" maxlength="12"></div>
-                <div class="form-group"><label>Mobile Number *</label><input type="text" id="regMobile" value="+919876543210"></div>
+                <div class="form-group">
+                    <label>Mobile Number *</label>
+                    <div class="mobile-input-wrap">
+                        <span class="mobile-prefix">+91</span>
+                        <input type="text" id="regMobile" maxlength="10" placeholder="9876543210">
+                    </div>
+                </div>
                 <div class="form-group">
                     <label>Appearing Year *</label>
                     <select id="regAppearingYear">
-                        <option value="2027" selected>2027</option>
-                    </select>
-                </div>
-            </div>
-
-            <div class="grid-2" style="margin-top: 16px;">
-                <div class="form-group">
-                    <label>Session *</label>
-                    <select id="regSession">
-                        <option value="Session 1: January Cycle" selected>Session 1: January Cycle</option>
+                        <option value="2027">2027</option>
+                        <option value="2029">2029</option>
                     </select>
                 </div>
                 <div class="form-group">
                     <label>Exam City *</label>
                     <select id="regCity">
-                        <option value="Bhubaneswar, Odisha" selected>Bhubaneswar, Odisha</option>
+                        <option value="">-- Select City --</option>
+                        <option value="Bhubaneshwar">Bhubaneshwar</option>
+                        <option value="Rourkela">Rourkela</option>
+                        <option value="Sambalpur">Sambalpur</option>
+                        <option value="Angul">Angul</option>
+                        <option value="Bargarh">Bargarh</option>
+                        <option value="Cuttack">Cuttack</option>
                     </select>
                 </div>
-            </div>
-
-            <div class="form-group" style="margin-top: 16px;">
-                <label>Signature Photo (JPEG) *</label>
-                <input type="file" id="regSignatureFile" accept="image/jpeg">
+                <div class="form-group"><label>Signature Photo (JPEG) *</label><input type="file" id="regSignatureFile" accept="image/jpeg"></div>
             </div>
 
             <div class="grid-2" style="margin-top: 16px;">
                 <div class="form-group">
-                    <label>Passkey (Simple) *</label>
-                    <div class="pass-container">
-                        <input type="text" id="regPass" value="pass123">
-                    </div>
+                    <label>Passkey *</label>
+                    <input type="text" id="regPass" readonly>
                 </div>
                 <div class="form-group" style="display: flex; align-items: flex-start; gap: 12px; padding-top: 24px;">
-                    <input type="checkbox" id="regDeclaration" checked style="width: 20px; height: 20px; accent-color: var(--cyan);">
-                    <label for="regDeclaration" style="font-size: 0.8rem; text-transform: none; color: #cbd5e1;">I have read and filled all details carefully. *</label>
+                    <input type="checkbox" id="regDeclaration" style="width: 22px; height: 22px; accent-color: var(--cyan); cursor: pointer; flex-shrink: 0; margin-top: 2px;">
+                    <label for="regDeclaration" style="font-size: 0.82rem; text-transform: none; line-height: 1.5; color: #cbd5e1; cursor: pointer;">
+                        I have read and filled all details carefully. *
+                    </label>
                 </div>
             </div>
 
-            <button class="btn btn-primary" style="margin-top: 20px;" onclick="submitRegistration()">Register Candidate</button>
+            <button type="button" class="btn btn-primary" style="margin-top: 20px;" onclick="submitRegistration()">Register Candidate</button>
         </div>
     </div>
 
@@ -328,7 +349,7 @@
                     <h2>Candidate Portal & Admit Card</h2>
                     <p class="sub" style="margin-bottom:0;">Status: <strong style="color:var(--success);">VERIFIED</strong></p>
                 </div>
-                <button class="btn btn-outline" onclick="switchView('view-home')">Logout</button>
+                <button type="button" class="btn btn-outline" onclick="switchView('view-home')">Logout</button>
             </div>
 
             <div class="slip-box">
@@ -337,11 +358,13 @@
                     <tr><th>Application Number</th><td><strong id="dashAppNo"></strong></td></tr>
                     <tr><th>Roll Number</th><td id="dashRollNo"></td></tr>
                     <tr><th>Candidate Name</th><td id="dashName"></td></tr>
+                    <tr><th>Father's Name</th><td id="dashFather"></td></tr>
+                    <tr><th>Exam City</th><td id="dashCity"></td></tr>
                     <tr><th>Passkey</th><td><strong style="color:var(--warning);" id="dashPasskey"></strong></td></tr>
                 </table>
             </div>
 
-            <button class="btn btn-success" style="width:100%; font-size:1.05rem; padding:16px;" onclick="checkSystemHardwareAndLaunch()">Run Hardware Check & Enter Exam Room &rarr;</button>
+            <button type="button" class="btn btn-success" style="width:100%; font-size:1.05rem; padding:16px;" onclick="verifyHardwareAndLaunch()">Run Hardware Sensor Check & Enter Exam Room &rarr;</button>
         </div>
     </div>
 
@@ -369,31 +392,34 @@
 
                 <div style="display:flex; justify-content:space-between; margin-top:24px; border-top:1px solid rgba(255,255,255,0.08); padding-top:16px;">
                     <div style="display:flex; gap:8px;">
-                        <button class="btn btn-outline" onclick="prevQ()">&larr; Prev</button>
-                        <button class="btn btn-outline" onclick="clearAns()">Clear</button>
+                        <button type="button" class="btn btn-outline" onclick="prevQ()">&larr; Prev</button>
+                        <button type="button" class="btn btn-outline" onclick="clearAns()">Clear</button>
                     </div>
                     <div style="display:flex; gap:8px;">
-                        <button class="btn btn-purple" onclick="markReview()">Review</button>
-                        <button class="btn btn-primary" onclick="saveNext()">Save & Next &rarr;</button>
+                        <button type="button" class="btn btn-purple" onclick="markReview()">Review</button>
+                        <button type="button" class="btn btn-primary" onclick="saveNext()">Save & Next &rarr;</button>
                     </div>
                 </div>
             </div>
 
             <div class="palette-box">
-                <h3 style="font-size:0.95rem; margin-bottom:8px;">Question Matrix</h3>
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+                    <h3 style="font-size:0.95rem; margin-bottom:0;">Question Matrix</h3>
+                    <span class="sensor-badge" id="sensorBadge">Sensors Active</span>
+                </div>
                 <div class="palette-grid" id="paletteGrid"></div>
-                <button class="btn btn-danger" style="width:100%; margin-top:12px;" onclick="confirmFinalSubmit()">Final Submit</button>
+                <button type="button" class="btn btn-danger" style="width:100%; margin-top:12px;" onclick="confirmFinalSubmit()">Final Submit</button>
                 
-                <h3 style="font-size:0.85rem; margin-top:16px; margin-bottom:6px; color:var(--cyan);">📹🎙️ Cam & Mic AI Inspector</h3>
+                <h3 style="font-size:0.85rem; margin-top:16px; margin-bottom:6px; color:var(--cyan);">📹🎙️ AI Proctor & Telemetry</h3>
                 <div class="telemetry-box" id="telemetryLog">
-                    [System] Initializing media streams...<br>
-                    [Cam/Mic] Verified and monitoring.
+                    [System] Initializing surveillance streams...<br>
+                    [Proctor] Active monitoring online.
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- VIEW 5: SCORECARD / POST-EXAM SUMMARY WITH SHIFTED LOGS & STATS -->
+    <!-- VIEW 5: FINAL SUMMARY -->
     <div id="view-score" class="view" style="max-width: 800px;">
         <div class="card" style="text-align:center;">
             <h2>Assessment Submitted Successfully</h2>
@@ -407,13 +433,12 @@
                     <tr><th>Total Questions</th><td id="sumTotal">5</td></tr>
                     <tr><th>Attempted Questions</th><td id="sumAttempted">0</td></tr>
                     <tr><th>Unattempted Questions</th><td id="sumUnattempted">0</td></tr>
-                    <tr><th>Correct Answers</th><td id="sumCorrect" style="color:var(--success);">0</td></tr>
-                    <tr><th>Incorrect Answers</th><td id="sumIncorrect" style="color:var(--danger);">0</td></tr>
-                    <tr><th>Total Strikes / Warnings</th><td id="sumStrikes" style="color:var(--warning);">0</td></tr>
+                    <tr><th>Correct Answers</th><td id="sumCorrect" style="color:var(--success); font-weight:700;">0</td></tr>
+                    <tr><th>Incorrect Answers</th><td id="sumIncorrect" style="color:var(--danger); font-weight:700;">0</td></tr>
+                    <tr><th>Total Strikes / Warnings</th><td id="sumStrikes" style="color:var(--warning); font-weight:700;">0</td></tr>
                 </table>
             </div>
 
-            <!-- AUDIT LOGS SHIFTED HERE -->
             <div style="background: rgba(15, 23, 42, 0.95); border: 1px dashed var(--cyan); padding: 18px; border-radius: 14px; margin-bottom: 24px; text-align: left;">
                 <h3 style="color:var(--cyan); margin-bottom: 8px; border:none; padding:0; font-size:0.95rem;">📋 Surveillance & System Audit Logs</h3>
                 <div class="telemetry-box" id="finalTelemetryLog" style="max-height: 120px; font-size: 0.8rem;">
@@ -426,7 +451,7 @@
                 <p style="font-size: 0.85rem; color: #cbd5e1; margin-top: 6px;">Official rank lists and detailed evaluation will be published after formal assessment closure.</p>
             </div>
 
-            <button class="btn btn-primary" style="max-width:260px;" onclick="switchView('view-home')">Return Home</button>
+            <button type="button" class="btn btn-primary" style="max-width:260px;" onclick="switchView('view-home')">Return Home</button>
         </div>
     </div>
 
@@ -437,7 +462,7 @@
     <div class="modal-card">
         <h2 style="color:var(--danger); margin-bottom:10px;">⚠️ PROCTORING SURVEILLANCE ALERT</h2>
         <p id="modalReason" style="font-weight:500; margin-bottom:14px;">Focus breach detected.</p>
-        <button class="btn btn-danger" style="width:100%;" onclick="resumeExam()">Acknowledge & Resume</button>
+        <button type="button" class="btn btn-danger" style="width:100%;" onclick="resumeExam()">Acknowledge & Resume</button>
     </div>
 </div>
 
@@ -487,6 +512,55 @@
         input.type = input.type === 'password' ? 'text' : 'password';
     }
 
+    // Dynamic shuffling candidate generator on every refresh/reopen
+    const firstNames = ["Aarav", "Priya", "Rahul", "Sneha", "Ananya", "Rohan", "Karan", "Neha", "Aditya", "Meera"];
+    const lastNames = ["Sharma", "Patel", "Verma", "Das", "Gupta", "Sen", "Nair", "Iyer", "Reddy", "Mishra"];
+    const fatherNames = ["Sanjay", "Rajesh", "Manoj", "Alok", "Sunil", "Vikram", "Ajay", "Pradeep"];
+    const motherNames = ["Sunita", "Poonam", "Geeta", "Anita", "Kavita", "Rekha", "Suman"];
+
+    function generateRandomCandidate() {
+        const fName = firstNames[Math.floor(Math.random() * firstNames.length)];
+        const lName = lastNames[Math.floor(Math.random() * lastNames.length)];
+        const fatName = fatherNames[Math.floor(Math.random() * fatherNames.length)] + " " + lName;
+        const motName = motherNames[Math.floor(Math.random() * motherNames.length)] + " " + lastNames[Math.floor(Math.random() * lastNames.length)];
+        
+        const appNo = String(Math.floor(1000 + Math.random() * 9000));
+        const rollNo = "27OR" + Math.floor(100 + Math.random() * 900);
+        const pass = "beta" + Math.floor(100 + Math.random() * 900);
+
+        return {
+            appNo,
+            rollNo,
+            name: fName + " " + lName,
+            father: fatName,
+            mother: motName,
+            pass,
+            strikes: 0,
+            banStatus: "Active"
+        };
+    }
+
+    let activeCandidate = generateRandomCandidate();
+    let registeredCandidates = [activeCandidate];
+
+    function openRegistration() {
+        // Shuffle fresh details on opening registration
+        activeCandidate = generateRandomCandidate();
+        registeredCandidates = [activeCandidate];
+        
+        document.getElementById('regName').value = activeCandidate.name;
+        document.getElementById('regFather').value = activeCandidate.father;
+        document.getElementById('regMother').value = activeCandidate.mother;
+        document.getElementById('regPass').value = activeCandidate.pass;
+        document.getElementById('regMobile').value = "";
+        document.getElementById('regDob').value = "";
+        document.getElementById('regCategory').value = "";
+        document.getElementById('regCity').value = "";
+        document.getElementById('regDeclaration').checked = false;
+
+        switchView('view-register');
+    }
+
     const defaultQuestions = [
         { q: "Which data type in Python is mutable?", options: ["Tuple", "String", "List", "Integer"], correct: 2 },
         { q: "What is the output of 'Hello'[1]?", options: ["H", "e", "l", "o"], correct: 1 },
@@ -496,13 +570,11 @@
     ];
 
     let questionsBank = defaultQuestions;
-    let registeredCandidates = [
-        { appNo: "1001", rollNo: "27OR101", name: "Subrata Paul", father: "Sanjay Paul", session: "Session 1: January Cycle", city: "Bhubaneswar, Odisha", pass: "pass123", strikes: 0, banStatus: "Active" }
-    ];
-
     let currentCandidate = null;
     let currentQ = 0, userAnswers = [], qStatus = [], examActive = false, strikes = 0, timeLeft = 10800, timer = null;
     let globalAuditLogs = "";
+    let activeStream = null;
+    let mouseTrackingActive = false;
 
     function switchView(id) {
         document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
@@ -510,22 +582,65 @@
         if (target) target.classList.add('active');
     }
 
-    function devQuickFill() {
-        document.getElementById('regName').value = "Subrata Paul";
-        document.getElementById('regPass').value = "pass123";
-        alert("⚡ Quick Fill applied! Use App No: 1001, Passkey: pass123 to login.");
+    function validateTitleCase(val, fieldName) {
+        if (!val) { alert(`${fieldName} is mandatory.`); return false; }
+        const parts = val.trim().split(/\s+/);
+        if (parts.length < 2) {
+            alert(`${fieldName} must include first name and surname, with the first letter of each capitalized (e.g., Aarav Sharma).`);
+            return false;
+        }
+        for (let part of parts) {
+            if (!/^[A-Z][a-z]+$/.test(part)) {
+                alert(`${fieldName} format error: Each part must start with a capital letter followed by lowercase letters (e.g., Aarav Sharma).`);
+                return false;
+            }
+        }
+        return true;
     }
 
     function submitRegistration() {
-        const name = document.getElementById('regName').value.trim();
-        const pass = document.getElementById('regPass').value.trim();
-        const appNo = "100" + Math.floor(10 + Math.random() * 90);
-        const rollNo = "27OR" + Math.floor(100 + Math.random() * 900);
+        const name = document.getElementById('regName').value;
+        if (!validateTitleCase(name, "Candidate Name")) return;
 
-        const candidate = { appNo, rollNo, name, father: "Sanjay Paul", session: "Session 1: January Cycle", city: "Bhubaneswar, Odisha", pass, strikes: 0, banStatus: "Active" };
-        registeredCandidates.push(candidate);
+        const father = document.getElementById('regFather').value;
+        if (!validateTitleCase(father, "Father's Name")) return;
 
-        alert(`Registration Successful!\nApplication ID: ${appNo}\nPasskey: ${pass}`);
+        const mother = document.getElementById('regMother').value;
+        if (!validateTitleCase(mother, "Mother's Name")) return;
+
+        const dob = document.getElementById('regDob').value;
+        if (!dob) { alert("Date of Birth is mandatory."); return; }
+
+        const category = document.getElementById('regCategory').value;
+        if (!category) { alert("Please select a Category."); return; }
+
+        const mobile = document.getElementById('regMobile').value.trim();
+        if (!/^\d{10}$/.test(mobile)) { alert("Mobile number must be exactly 10 digits."); return; }
+
+        const appearingYear = document.getElementById('regAppearingYear').value;
+        const dobYear = new Date(dob).getFullYear();
+        if (appearingYear - dobYear < 14) {
+            alert("System Check: Date of Birth does not align logically with the selected Exam Appearing Year.");
+            return;
+        }
+
+        const city = document.getElementById('regCity').value;
+        if (!city) { alert("Exam City is mandatory."); return; }
+
+        const sig = document.getElementById('regSignatureFile').files;
+        if (!sig || sig.length === 0) { alert("Signature photo is mandatory."); return; }
+
+        if (!document.getElementById('regDeclaration').checked) {
+            alert("You must check the declaration box before submitting.");
+            return;
+        }
+
+        activeCandidate.name = name;
+        activeCandidate.father = father;
+        activeCandidate.mother = mother;
+        activeCandidate.city = city;
+
+        alert(`Registration Successful!\nApplication No: ${activeCandidate.appNo}\nPasskey: ${activeCandidate.pass}`);
         switchView('view-home');
     }
 
@@ -534,31 +649,69 @@
         const pass = document.getElementById('loginPass').value.trim();
 
         const found = registeredCandidates.find(c => c.appNo === appNo && c.pass === pass);
-        if(!found) { alert("Invalid Application ID or Passkey."); return; }
+        if(!found) { alert("Invalid Application Number or Passkey."); return; }
 
         currentCandidate = found;
         document.getElementById('dashAppNo').innerText = found.appNo;
         document.getElementById('dashRollNo').innerText = found.rollNo;
         document.getElementById('dashName').innerText = found.name;
+        document.getElementById('dashFather').innerText = found.father;
+        document.getElementById('dashCity').innerText = found.city;
         document.getElementById('dashPasskey').innerText = found.pass;
 
         switchView('view-dashboard');
     }
 
-    // Camera & Mic check with graceful fallback/bypass if unavailable
-    async function checkSystemHardwareAndLaunch() {
+    // Hardware Sensor Check with Mouse Tracing Fallback if neither Cam nor Mic is found
+    async function verifyHardwareAndLaunch() {
+        let hasCamera = false;
+        let hasMic = false;
+
+        if (navigator.mediaDevices && navigator.mediaDevices.enumerateDevices) {
+            try {
+                const devices = await navigator.mediaDevices.enumerateDevices();
+                hasCamera = devices.some(d => d.kind === 'videoinput');
+                hasMic = devices.some(d => d.kind === 'audioinput');
+            } catch(e) {}
+        }
+
+        if (!hasCamera && !hasMic) {
+            // Fallback to Mouse Movement & Behavioral Tracing
+            mouseTrackingActive = true;
+            initMouseTracing();
+            document.getElementById('sensorBadge').innerText = "Mouse Behavioral Tracing Active";
+            alert("⚠️ Notice: No Camera or Microphone detected on your system.\n\nTESTIFY Beta has automatically initiated Advanced Mouse Movement & Behavioral Tracing to secure your exam session.");
+            launchExam("Mouse Behavioral Tracing (No Cam/Mic)");
+            return;
+        }
+
         try {
-            const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
-            stream.getTracks().forEach(track => track.stop());
-            launchExam();
+            activeStream = await navigator.mediaDevices.getUserMedia({ video: hasCamera, audio: hasMic });
+            let mode = "Dual Sensor (Cam + Mic)";
+            if (hasCamera && !hasMic) mode = "Visual Only (No Mic)";
+            if (!hasCamera && hasMic) mode = "Audio Only (No Cam)";
+
+            document.getElementById('sensorBadge').innerText = mode;
+            launchExam(mode);
         } catch (err) {
-            console.warn("Hardware check fallback: Camera or Microphone unavailable or blocked.", err);
-            alert("⚠️ Notice: Camera or Microphone device not fully accessible. Gracefully bypassing for beta mode and entering exam room.");
-            launchExam();
+            // If permission denied for cam/mic, fallback to mouse tracing
+            mouseTrackingActive = true;
+            initMouseTracing();
+            document.getElementById('sensorBadge').innerText = "Mouse Behavioral Tracing Active";
+            alert("⚠️ Camera/Mic permission denied. Switching to Mouse Behavioral Tracing mode.");
+            launchExam("Mouse Behavioral Tracing (Permission Fallback)");
         }
     }
 
-    function launchExam() {
+    function initMouseTracing() {
+        let lastMove = Date.now();
+        window.addEventListener('mousemove', () => {
+            if (!examActive) return;
+            lastMove = Date.now();
+        });
+    }
+
+    function launchExam(mode) {
         document.documentElement.requestFullscreen?.().catch(()=>{});
         particlesActive = false;
 
@@ -569,10 +722,11 @@
         strikes = currentCandidate.strikes || 0;
         timeLeft = 10800;
         examActive = true;
-        globalAuditLogs = `[${new Date().toLocaleTimeString()}] Exam initialized for ${currentCandidate.name} (${currentCandidate.appNo}).<br>`;
+        globalAuditLogs = `[${new Date().toLocaleTimeString()}] Exam session started for ${currentCandidate.name} (${currentCandidate.appNo}). Mode: ${mode}.<br>`;
 
         document.getElementById('examHeaderName').innerText = `${currentCandidate.name} (${currentCandidate.rollNo})`;
         document.getElementById('strikeDisplay').innerText = strikes;
+        document.getElementById('telemetryLog').innerHTML = `[System] ${mode} verified and active.<br>[AI] Proctoring perimeter online.`;
 
         switchView('view-exam');
         loadQuestion(0);
@@ -637,8 +791,19 @@
         });
     }
 
+    // Strike reporting on tab switches and leaving page
     document.addEventListener('visibilitychange', () => {
-        if(examActive && document.hidden) triggerSurveillanceStrike("Tab switch / focus blur detected!");
+        if(examActive && document.hidden) {
+            triggerSurveillanceStrike("Tab switch / window focus breach detected!");
+        }
+    });
+
+    window.addEventListener('beforeunload', (e) => {
+        if(examActive) {
+            e.preventDefault();
+            e.returnValue = '';
+            triggerSurveillanceStrike("Attempted to leave or refresh examination page without submitting!");
+        }
     });
 
     function logAudit(msg) {
@@ -650,7 +815,7 @@
         if(!examActive) return;
         strikes++;
         document.getElementById('strikeDisplay').innerText = strikes;
-        logAudit(`⚠️ Warning / Strike recorded: ${reason}`);
+        logAudit(`⚠️ Strike Recorded: ${reason}`);
 
         const rEl = document.getElementById('modalReason');
         const modal = document.getElementById('securityModal');
@@ -671,6 +836,10 @@
     function finalizeExam(statusNote) {
         examActive = false;
         clearInterval(timer);
+        if (activeStream) {
+            activeStream.getTracks().forEach(t => t.stop());
+            activeStream = null;
+        }
         if(document.fullscreenElement) document.exitFullscreen?.().catch(()=>{});
         particlesActive = true;
 
