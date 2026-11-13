@@ -1,0 +1,704 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TESTIFY Beta | Testing Environment</title>
+    <style>
+        :root {
+            --bg-base: #060b1e;
+            --surface: rgba(15, 23, 42, 0.78);
+            --card-border: rgba(56, 189, 248, 0.3);
+            --primary: #0ea5e9;
+            --cyan: #38bdf8;
+            --indigo: #6366f1;
+            --purple: #a855f7;
+            --success: #10b981;
+            --danger: #f43f5e;
+            --warning: #fbbf24;
+            --text: #f8fafc;
+            --muted: #94a3b8;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', system-ui, sans-serif; }
+
+        body {
+            background-color: var(--bg-base);
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(14, 165, 233, 0.18) 0%, transparent 40%),
+                radial-gradient(circle at 90% 80%, rgba(168, 85, 247, 0.18) 0%, transparent 40%),
+                radial-gradient(circle at 50% 50%, rgba(99, 102, 241, 0.12) 0%, transparent 60%);
+            color: var(--text);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        #particleCanvas {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        header {
+            background: rgba(7, 13, 29, 0.85);
+            backdrop-filter: blur(20px);
+            padding: 16px 32px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--card-border);
+            position: sticky; top: 0; z-index: 100;
+        }
+
+        .brand-wrap { display: flex; align-items: center; gap: 16px; }
+        .artistic-logo {
+            width: 46px; height: 46px; border-radius: 14px;
+            background: linear-gradient(135deg, var(--cyan), var(--indigo), var(--purple));
+            display: flex; align-items: center; justify-content: center;
+            font-weight: 900; font-size: 1.3rem; color: white;
+        }
+
+        header h1 { font-size: 1.5rem; letter-spacing: 2px; color: #fff; font-weight: 800; display: flex; align-items: baseline; gap: 10px; }
+        
+        /* Sleek, italic, very curvy and wavy calligraphy for 'Beta' */
+        .beta-calligraphy {
+            font-family: 'Brush Script MT', 'Lucida Handwriting', cursive, sans-serif;
+            font-style: italic;
+            font-weight: 400;
+            font-size: 1.3rem;
+            background: linear-gradient(135deg, #f43f5e, #fbbf24, #a855f7);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: 1px;
+            display: inline-block;
+            transform: rotate(-5deg);
+            filter: drop-shadow(0 0 8px rgba(244, 63, 94, 0.4));
+            animation: waveBeta 3s ease-in-out infinite alternate;
+        }
+        @keyframes waveBeta {
+            0% { transform: rotate(-6deg) translateY(0px); }
+            100% { transform: rotate(-2deg) translateY(-2px); }
+        }
+
+        header p { font-size: 0.72rem; color: var(--cyan); letter-spacing: 0.5px; font-weight: 600; text-transform: uppercase; }
+
+        .status-pill {
+            background: rgba(16, 185, 129, 0.15);
+            border: 1px solid rgba(16, 185, 129, 0.4);
+            color: #34d399;
+            padding: 6px 14px; border-radius: 30px;
+            font-size: 0.78rem; font-weight: 600;
+            display: flex; align-items: center; gap: 8px;
+        }
+        .pulse-dot { width: 7px; height: 7px; border-radius: 50%; background: #34d399; animation: blink 1.5s infinite; }
+        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+
+        .container { max-width: 700px; width: 94%; margin: 32px auto; flex: 1; z-index: 2; }
+        .view { display: none; }
+        .view.active { display: block; animation: fadeIn 0.4s ease; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+        .card {
+            background: var(--surface);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--card-border);
+            border-radius: 18px;
+            padding: 30px;
+            margin-bottom: 24px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+        }
+
+        .grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
+        .grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; }
+
+        h2 { font-size: 1.35rem; margin-bottom: 6px; color: #fff; font-weight: 700; }
+        h3 { font-size: 1.05rem; margin-bottom: 14px; color: var(--cyan); border-bottom: 1px solid rgba(255,255,255,0.08); padding-bottom: 8px; }
+        .sub { color: var(--muted); font-size: 0.9rem; margin-bottom: 20px; line-height: 1.5; }
+
+        .form-group { margin-bottom: 16px; }
+        label { display: block; font-size: 0.8rem; font-weight: 600; color: #cbd5e1; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.6px; }
+        input, select {
+            width: 100%; padding: 12px 16px;
+            background: rgba(15, 23, 42, 0.75);
+            border: 1px solid rgba(148, 163, 184, 0.3);
+            border-radius: 12px; color: white; font-size: 0.95rem;
+        }
+        input:focus, select:focus { outline: none; border-color: var(--cyan); box-shadow: 0 0 15px rgba(56, 189, 248, 0.25); }
+
+        .pass-container { position: relative; }
+        .pass-container input { padding-right: 48px; }
+        .pass-toggle-btn {
+            position: absolute; right: 12px; top: 50%; transform: translateY(-50%);
+            background: none; border: none; cursor: pointer; color: var(--muted); padding: 4px;
+        }
+
+        .btn {
+            padding: 12px 22px; border: none; border-radius: 12px;
+            font-weight: 600; cursor: pointer; font-size: 0.95rem;
+            display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+            transition: 0.25s;
+        }
+        .btn:hover { transform: translateY(-2px); filter: brightness(1.1); }
+        .btn-primary { background: linear-gradient(135deg, var(--primary), var(--indigo)); color: white; width: 100%; }
+        .btn-success { background: linear-gradient(135deg, #059669, #10b981); color: white; }
+        .btn-danger { background: linear-gradient(135deg, #be123c, #f43f5e); color: white; }
+        .btn-purple { background: linear-gradient(135deg, #7c3aed, #8b5cf6); color: white; }
+        .btn-outline { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.2); color: white; }
+
+        .slip-box { border: 1px solid var(--cyan); background: rgba(56, 189, 248, 0.05); padding: 22px; border-radius: 14px; margin-bottom: 18px; }
+        .slip-table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 0.9rem; }
+        .slip-table td, .slip-table th { border: 1px solid rgba(255,255,255,0.1); padding: 10px 14px; text-align: left; }
+        .slip-table th { background: rgba(255,255,255,0.04); color: var(--cyan); width: 40%; }
+
+        .exam-top {
+            background: #0b1329; border: 1px solid rgba(56, 189, 248, 0.3);
+            padding: 16px 24px; border-radius: 14px;
+            display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 12px;
+        }
+        .timer { font-size: 1.2rem; font-weight: 800; color: #fb7185; background: rgba(244, 63, 94, 0.12); padding: 8px 16px; border-radius: 10px; border: 1px solid rgba(244, 63, 94, 0.35); }
+        .exam-body { display: grid; grid-template-columns: 1fr 320px; gap: 22px; }
+        @media (max-width: 900px) { .exam-body { grid-template-columns: 1fr; } }
+
+        .q-box {
+            background: #0b1329; border: 1px solid rgba(56, 189, 248, 0.3); border-radius: 16px;
+            padding: 28px; min-height: 440px; display: flex; flex-direction: column; justify-content: space-between;
+        }
+        .option-row {
+            border: 1.5px solid rgba(255,255,255,0.12); background: rgba(15, 23, 42, 0.7);
+            padding: 14px 18px; border-radius: 12px; margin-bottom: 12px; cursor: pointer;
+            display: flex; align-items: center; gap: 12px; transition: 0.2s;
+        }
+        .option-row:hover { border-color: var(--cyan); background: rgba(56, 189, 248, 0.08); }
+        .option-row.selected { border-color: var(--cyan); background: rgba(56, 189, 248, 0.2); color: #bae6fd; font-weight: 700; }
+
+        .palette-box { background: #0b1329; border: 1px solid rgba(56, 189, 248, 0.3); border-radius: 16px; padding: 20px; }
+        .palette-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; margin: 14px 0; }
+        .p-btn { height: 38px; border: 1px solid rgba(255,255,255,0.15); border-radius: 8px; font-weight: bold; cursor: pointer; background: rgba(255,255,255,0.05); color: white; }
+        .p-btn.current { outline: 2px solid var(--cyan); }
+        .p-btn.answered { background: var(--success); border-color: var(--success); }
+        .p-btn.visited { background: var(--danger); border-color: var(--danger); }
+        .p-btn.review { background: var(--purple); border-color: var(--purple); }
+
+        .telemetry-box {
+            background: rgba(15, 23, 42, 0.95);
+            border: 1px solid var(--cyan);
+            padding: 12px;
+            border-radius: 12px;
+            margin-top: 10px;
+            font-size: 0.75rem;
+            font-family: monospace;
+            color: #38bdf8;
+            max-height: 120px;
+            overflow-y: auto;
+        }
+
+        #securityModal { position: fixed; inset: 0; background: rgba(6, 11, 30, 0.92); backdrop-filter: blur(8px); display: none; align-items: center; justify-content: center; z-index: 9999; padding: 20px; }
+        .modal-card { background: #0b1329; border: 1px solid var(--danger); padding: 30px; border-radius: 18px; max-width: 440px; text-align: center; }
+    </style>
+</head>
+<body>
+
+<canvas id="particleCanvas"></canvas>
+
+<header>
+    <div class="brand-wrap">
+        <div class="artistic-logo">T</div>
+        <div>
+            <h1>TESTIFY <span class="beta-calligraphy">Beta</span></h1>
+            <p>Testing Environment</p>
+        </div>
+    </div>
+    <div class="status-pill"><span class="pulse-dot"></span> BETA MODE ACTIVE</div>
+</header>
+
+<div class="container">
+
+    <!-- VIEW 1: HOME & LOGIN -->
+    <div id="view-home" class="view active">
+        <div class="card">
+            <h2>Candidate Access Portal</h2>
+            <p class="sub">Enter your simple Application Number and Passkey.</p>
+            <div class="form-group"><label>Application Number</label><input type="text" id="loginAppNo" value="1001" placeholder="e.g., 1001"></div>
+            <div class="form-group">
+                <label>Passkey</label>
+                <div class="pass-container">
+                    <input type="password" id="loginPass" value="pass123" placeholder="Enter passkey">
+                    <button type="button" class="pass-toggle-btn" onclick="togglePasswordVisibility('loginPass', this)" title="Toggle Password Visibility">👁️</button>
+                </div>
+            </div>
+            <button class="btn btn-primary" onclick="candidateLogin()">Access Portal &rarr;</button>
+            <hr style="margin: 24px 0; border:0; border-top:1px solid rgba(255,255,255,0.08);">
+            <p style="font-size:0.9rem; margin-bottom:12px; color:#cbd5e1;"><strong>New Aspirant?</strong></p>
+            <button class="btn btn-outline" style="width:100%;" onclick="switchView('view-register')">Begin Registration &rarr;</button>
+        </div>
+    </div>
+
+    <!-- VIEW 2: REGISTRATION -->
+    <div id="view-register" class="view" style="max-width: 900px;">
+        <div class="card">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
+                <h2>TESTIFY — Candidate Registration</h2>
+                <button class="btn btn-outline" onclick="switchView('view-home')">&larr; Back</button>
+            </div>
+            <p class="sub">Dummy registration form with simple credentials.</p>
+
+            <div style="margin-bottom: 20px; background: rgba(251, 191, 36, 0.08); border: 1px dashed var(--warning); padding: 14px; border-radius: 12px; display: flex; justify-content: space-between; align-items: center;">
+                <div>
+                    <strong style="color: var(--warning); font-size: 0.9rem;">🛠️ Quick Dummy Fill</strong>
+                    <p style="font-size: 0.78rem; color: var(--muted);">Instantly fill sample data for quick testing.</p>
+                </div>
+                <button type="button" class="btn" style="background: var(--warning); color: #000; font-weight: 700; padding: 8px 16px;" onclick="devQuickFill()">⚡ Quick Fill</button>
+            </div>
+
+            <div class="grid-3">
+                <div class="form-group"><label>Full Name *</label><input type="text" id="regName" value="Subrata Paul"></div>
+                <div class="form-group"><label>Father's Name *</label><input type="text" id="regFather" value="Sanjay Paul"></div>
+                <div class="form-group"><label>Mother's Name *</label><input type="text" id="regMother" value="Ranu Paul"></div>
+                <div class="form-group"><label>Date of Birth *</label><input type="date" id="regDob" value="2008-01-01"></div>
+                <div class="form-group">
+                    <label>Gender *</label>
+                    <select id="regGender">
+                        <option value="Male" selected>Male</option>
+                        <option value="Female">Female</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Category *</label>
+                    <select id="regCategory">
+                        <option value="GENERAL" selected>General</option>
+                        <option value="OBC">OBC</option>
+                    </select>
+                </div>
+                <div class="form-group"><label>ID No. *</label><input type="text" id="regAadhaar" value="123456789012" maxlength="12"></div>
+                <div class="form-group"><label>Mobile Number *</label><input type="text" id="regMobile" value="+919876543210"></div>
+                <div class="form-group">
+                    <label>Appearing Year *</label>
+                    <select id="regAppearingYear">
+                        <option value="2027" selected>2027</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="grid-2" style="margin-top: 16px;">
+                <div class="form-group">
+                    <label>Session *</label>
+                    <select id="regSession">
+                        <option value="Session 1: January Cycle" selected>Session 1: January Cycle</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Exam City *</label>
+                    <select id="regCity">
+                        <option value="Bhubaneswar, Odisha" selected>Bhubaneswar, Odisha</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group" style="margin-top: 16px;">
+                <label>Signature Photo (JPEG) *</label>
+                <input type="file" id="regSignatureFile" accept="image/jpeg">
+            </div>
+
+            <div class="grid-2" style="margin-top: 16px;">
+                <div class="form-group">
+                    <label>Passkey (Simple) *</label>
+                    <div class="pass-container">
+                        <input type="text" id="regPass" value="pass123">
+                    </div>
+                </div>
+                <div class="form-group" style="display: flex; align-items: flex-start; gap: 12px; padding-top: 24px;">
+                    <input type="checkbox" id="regDeclaration" checked style="width: 20px; height: 20px; accent-color: var(--cyan);">
+                    <label for="regDeclaration" style="font-size: 0.8rem; text-transform: none; color: #cbd5e1;">I have read and filled all details carefully. *</label>
+                </div>
+            </div>
+
+            <button class="btn btn-primary" style="margin-top: 20px;" onclick="submitRegistration()">Register Candidate</button>
+        </div>
+    </div>
+
+    <!-- VIEW 3: DASHBOARD -->
+    <div id="view-dashboard" class="view" style="max-width: 800px;">
+        <div class="card">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:18px;">
+                <div>
+                    <h2>Candidate Portal & Admit Card</h2>
+                    <p class="sub" style="margin-bottom:0;">Status: <strong style="color:var(--success);">VERIFIED</strong></p>
+                </div>
+                <button class="btn btn-outline" onclick="switchView('view-home')">Logout</button>
+            </div>
+
+            <div class="slip-box">
+                <h3>E-Admit Card Details</h3>
+                <table class="slip-table">
+                    <tr><th>Application Number</th><td><strong id="dashAppNo"></strong></td></tr>
+                    <tr><th>Roll Number</th><td id="dashRollNo"></td></tr>
+                    <tr><th>Candidate Name</th><td id="dashName"></td></tr>
+                    <tr><th>Passkey</th><td><strong style="color:var(--warning);" id="dashPasskey"></strong></td></tr>
+                </table>
+            </div>
+
+            <button class="btn btn-success" style="width:100%; font-size:1.05rem; padding:16px;" onclick="checkSystemHardwareAndLaunch()">Run Hardware Check & Enter Exam Room &rarr;</button>
+        </div>
+    </div>
+
+    <!-- VIEW 4: EXAM HALL -->
+    <div id="view-exam" class="view" style="max-width: 1220px;">
+        <div class="exam-top">
+            <div>
+                <strong id="examHeaderName" style="font-size:1.05rem;"></strong>
+                <div style="font-size:0.8rem; color:var(--cyan);" id="examHeaderSession"></div>
+            </div>
+            <div style="font-weight:bold; color:var(--warning);">Surveillance Strikes: <span id="strikeDisplay">0</span> / 15</div>
+            <div class="timer">Time Left: <span id="timerDisplay">03:00:00</span></div>
+        </div>
+
+        <div class="exam-body">
+            <div class="q-box">
+                <div>
+                    <div style="display:flex; justify-content:space-between; border-bottom:1px solid rgba(255,255,255,0.08); padding-bottom:10px; margin-bottom:16px; font-size:0.88rem; color:var(--muted);">
+                        <span id="qNumLabel">Question 1</span>
+                        <span>Scheme: <strong>+4.0</strong> | <strong>-1.0</strong></span>
+                    </div>
+                    <div id="qText" style="font-size:1.15rem; font-weight:600; margin-bottom:20px; line-height:1.55;">Loading...</div>
+                    <div id="optionsContainer"></div>
+                </div>
+
+                <div style="display:flex; justify-content:space-between; margin-top:24px; border-top:1px solid rgba(255,255,255,0.08); padding-top:16px;">
+                    <div style="display:flex; gap:8px;">
+                        <button class="btn btn-outline" onclick="prevQ()">&larr; Prev</button>
+                        <button class="btn btn-outline" onclick="clearAns()">Clear</button>
+                    </div>
+                    <div style="display:flex; gap:8px;">
+                        <button class="btn btn-purple" onclick="markReview()">Review</button>
+                        <button class="btn btn-primary" onclick="saveNext()">Save & Next &rarr;</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="palette-box">
+                <h3 style="font-size:0.95rem; margin-bottom:8px;">Question Matrix</h3>
+                <div class="palette-grid" id="paletteGrid"></div>
+                <button class="btn btn-danger" style="width:100%; margin-top:12px;" onclick="confirmFinalSubmit()">Final Submit</button>
+                
+                <h3 style="font-size:0.85rem; margin-top:16px; margin-bottom:6px; color:var(--cyan);">📹🎙️ Cam & Mic AI Inspector</h3>
+                <div class="telemetry-box" id="telemetryLog">
+                    [System] Initializing media streams...<br>
+                    [Cam/Mic] Verified and monitoring.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- VIEW 5: SCORECARD / POST-EXAM SUMMARY WITH SHIFTED LOGS & STATS -->
+    <div id="view-score" class="view" style="max-width: 800px;">
+        <div class="card" style="text-align:center;">
+            <h2>Assessment Submitted Successfully</h2>
+            <p class="sub">Your test responses and surveillance logs have been securely recorded.</p>
+            
+            <div style="background: rgba(56, 189, 248, 0.08); border: 1px solid var(--cyan); padding: 24px; border-radius: 16px; margin: 20px 0; text-align: left;">
+                <h3 style="color:var(--cyan); margin-bottom: 12px; border:none; padding:0;">Exam & Attempt Summary</h3>
+                <table class="slip-table" id="summaryTable">
+                    <tr><th>Candidate Name</th><td id="sumName"></td></tr>
+                    <tr><th>Application ID</th><td id="sumAppNo"></td></tr>
+                    <tr><th>Total Questions</th><td id="sumTotal">5</td></tr>
+                    <tr><th>Attempted Questions</th><td id="sumAttempted">0</td></tr>
+                    <tr><th>Unattempted Questions</th><td id="sumUnattempted">0</td></tr>
+                    <tr><th>Correct Answers</th><td id="sumCorrect" style="color:var(--success);">0</td></tr>
+                    <tr><th>Incorrect Answers</th><td id="sumIncorrect" style="color:var(--danger);">0</td></tr>
+                    <tr><th>Total Strikes / Warnings</th><td id="sumStrikes" style="color:var(--warning);">0</td></tr>
+                </table>
+            </div>
+
+            <!-- AUDIT LOGS SHIFTED HERE -->
+            <div style="background: rgba(15, 23, 42, 0.95); border: 1px dashed var(--cyan); padding: 18px; border-radius: 14px; margin-bottom: 24px; text-align: left;">
+                <h3 style="color:var(--cyan); margin-bottom: 8px; border:none; padding:0; font-size:0.95rem;">📋 Surveillance & System Audit Logs</h3>
+                <div class="telemetry-box" id="finalTelemetryLog" style="max-height: 120px; font-size: 0.8rem;">
+                    [Audit] Exam session completed successfully.<br>
+                </div>
+            </div>
+
+            <div style="background: rgba(251, 191, 36, 0.1); border: 1px solid var(--warning); padding: 18px; border-radius: 12px; margin-bottom: 24px;">
+                <strong style="color: var(--warning); font-size: 1rem;">⏳ Wait till the specified date for the result and ranks</strong>
+                <p style="font-size: 0.85rem; color: #cbd5e1; margin-top: 6px;">Official rank lists and detailed evaluation will be published after formal assessment closure.</p>
+            </div>
+
+            <button class="btn btn-primary" style="max-width:260px;" onclick="switchView('view-home')">Return Home</button>
+        </div>
+    </div>
+
+</div>
+
+<!-- SECURITY MODAL -->
+<div id="securityModal">
+    <div class="modal-card">
+        <h2 style="color:var(--danger); margin-bottom:10px;">⚠️ PROCTORING SURVEILLANCE ALERT</h2>
+        <p id="modalReason" style="font-weight:500; margin-bottom:14px;">Focus breach detected.</p>
+        <button class="btn btn-danger" style="width:100%;" onclick="resumeExam()">Acknowledge & Resume</button>
+    </div>
+</div>
+
+<script>
+    const canvas = document.getElementById('particleCanvas');
+    const ctx = canvas ? canvas.getContext('2d') : null;
+    let particlesActive = true;
+
+    function resizeCanvas() {
+        if (!canvas) return;
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+    }
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
+
+    const colors = ['rgba(56, 189, 248, 0.5)', 'rgba(168, 85, 247, 0.5)', 'rgba(16, 185, 129, 0.4)', 'rgba(99, 102, 241, 0.5)'];
+    const particles = Array.from({ length: 30 }, () => ({
+        x: Math.random() * (window.innerWidth || 800),
+        y: Math.random() * (window.innerHeight || 600),
+        vx: (Math.random() - 0.5) * 0.5,
+        vy: (Math.random() - 0.5) * 0.5,
+        radius: Math.random() * 2 + 1,
+        color: colors[Math.floor(Math.random() * colors.length)]
+    }));
+
+    function animateParticles() {
+        if (particlesActive && ctx && canvas) {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particles.forEach(p => {
+                p.x += p.vx; p.y += p.vy;
+                if (p.x < 0 || p.x > canvas.width) p.vx *= -1;
+                if (p.y < 0 || p.y > canvas.height) p.vy *= -1;
+                ctx.fillStyle = p.color;
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+                ctx.fill();
+            });
+        }
+        requestAnimationFrame(animateParticles);
+    }
+    animateParticles();
+
+    function togglePasswordVisibility(inputId, btn) {
+        const input = document.getElementById(inputId);
+        if (!input) return;
+        input.type = input.type === 'password' ? 'text' : 'password';
+    }
+
+    const defaultQuestions = [
+        { q: "Which data type in Python is mutable?", options: ["Tuple", "String", "List", "Integer"], correct: 2 },
+        { q: "What is the output of 'Hello'[1]?", options: ["H", "e", "l", "o"], correct: 1 },
+        { q: "Which keyword defines a function in Python?", options: ["func", "define", "def", "function"], correct: 2 },
+        { q: "How do you start a 'for' loop in Python?", options: ["for x in y:", "for (x in y)", "foreach x in y:", "loop x in y"], correct: 0 },
+        { q: "Which operator is used for exponentiation?", options: ["^", "**", "//", "%"], correct: 1 }
+    ];
+
+    let questionsBank = defaultQuestions;
+    let registeredCandidates = [
+        { appNo: "1001", rollNo: "27OR101", name: "Subrata Paul", father: "Sanjay Paul", session: "Session 1: January Cycle", city: "Bhubaneswar, Odisha", pass: "pass123", strikes: 0, banStatus: "Active" }
+    ];
+
+    let currentCandidate = null;
+    let currentQ = 0, userAnswers = [], qStatus = [], examActive = false, strikes = 0, timeLeft = 10800, timer = null;
+    let globalAuditLogs = "";
+
+    function switchView(id) {
+        document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+        const target = document.getElementById(id);
+        if (target) target.classList.add('active');
+    }
+
+    function devQuickFill() {
+        document.getElementById('regName').value = "Subrata Paul";
+        document.getElementById('regPass').value = "pass123";
+        alert("⚡ Quick Fill applied! Use App No: 1001, Passkey: pass123 to login.");
+    }
+
+    function submitRegistration() {
+        const name = document.getElementById('regName').value.trim();
+        const pass = document.getElementById('regPass').value.trim();
+        const appNo = "100" + Math.floor(10 + Math.random() * 90);
+        const rollNo = "27OR" + Math.floor(100 + Math.random() * 900);
+
+        const candidate = { appNo, rollNo, name, father: "Sanjay Paul", session: "Session 1: January Cycle", city: "Bhubaneswar, Odisha", pass, strikes: 0, banStatus: "Active" };
+        registeredCandidates.push(candidate);
+
+        alert(`Registration Successful!\nApplication ID: ${appNo}\nPasskey: ${pass}`);
+        switchView('view-home');
+    }
+
+    function candidateLogin() {
+        const appNo = document.getElementById('loginAppNo').value.trim();
+        const pass = document.getElementById('loginPass').value.trim();
+
+        const found = registeredCandidates.find(c => c.appNo === appNo && c.pass === pass);
+        if(!found) { alert("Invalid Application ID or Passkey."); return; }
+
+        currentCandidate = found;
+        document.getElementById('dashAppNo').innerText = found.appNo;
+        document.getElementById('dashRollNo').innerText = found.rollNo;
+        document.getElementById('dashName').innerText = found.name;
+        document.getElementById('dashPasskey').innerText = found.pass;
+
+        switchView('view-dashboard');
+    }
+
+    // Camera & Mic check with graceful fallback/bypass if unavailable
+    async function checkSystemHardwareAndLaunch() {
+        try {
+            const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+            stream.getTracks().forEach(track => track.stop());
+            launchExam();
+        } catch (err) {
+            console.warn("Hardware check fallback: Camera or Microphone unavailable or blocked.", err);
+            alert("⚠️ Notice: Camera or Microphone device not fully accessible. Gracefully bypassing for beta mode and entering exam room.");
+            launchExam();
+        }
+    }
+
+    function launchExam() {
+        document.documentElement.requestFullscreen?.().catch(()=>{});
+        particlesActive = false;
+
+        currentQ = 0;
+        userAnswers = new Array(questionsBank.length).fill(null);
+        qStatus = new Array(questionsBank.length).fill('unvisited');
+        qStatus[0] = 'visited';
+        strikes = currentCandidate.strikes || 0;
+        timeLeft = 10800;
+        examActive = true;
+        globalAuditLogs = `[${new Date().toLocaleTimeString()}] Exam initialized for ${currentCandidate.name} (${currentCandidate.appNo}).<br>`;
+
+        document.getElementById('examHeaderName').innerText = `${currentCandidate.name} (${currentCandidate.rollNo})`;
+        document.getElementById('strikeDisplay').innerText = strikes;
+
+        switchView('view-exam');
+        loadQuestion(0);
+        renderPalette();
+        startTimer();
+    }
+
+    function startTimer() {
+        clearInterval(timer);
+        timer = setInterval(() => {
+            if(!examActive) return;
+            timeLeft--;
+            let h = Math.floor(timeLeft / 3600), m = Math.floor((timeLeft % 3600) / 60), s = timeLeft % 60;
+            const tEl = document.getElementById('timerDisplay');
+            if (tEl) tEl.innerText = `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+            if(timeLeft <= 0) finalizeExam("Time Expired");
+        }, 1000);
+    }
+
+    function loadQuestion(idx) {
+        currentQ = idx;
+        if(qStatus[idx] === 'unvisited') qStatus[idx] = 'visited';
+        const q = questionsBank[idx];
+        document.getElementById('qNumLabel').innerText = `Question ${idx + 1} of ${questionsBank.length}`;
+        document.getElementById('qText').innerText = q.q;
+
+        const container = document.getElementById('optionsContainer');
+        container.innerHTML = "";
+        const labels = ["A", "B", "C", "D"];
+        q.options.forEach((opt, i) => {
+            const div = document.createElement('div');
+            div.className = 'option-row' + (userAnswers[idx] === i ? ' selected' : '');
+            div.innerHTML = `<strong>(${labels[i]})</strong> <span>${opt}</span>`;
+            div.onclick = () => { userAnswers[idx] = i; loadQuestion(idx); };
+            container.appendChild(div);
+        });
+        renderPalette();
+    }
+
+    function clearAns() { userAnswers[currentQ] = null; loadQuestion(currentQ); }
+    function saveNext() {
+        qStatus[currentQ] = userAnswers[currentQ] !== null ? 'answered' : 'visited';
+        if(currentQ < questionsBank.length - 1) loadQuestion(currentQ + 1); else renderPalette();
+    }
+    function markReview() { qStatus[currentQ] = 'review'; if(currentQ < questionsBank.length - 1) loadQuestion(currentQ + 1); else renderPalette(); }
+    function prevQ() { if(currentQ > 0) loadQuestion(currentQ - 1); }
+
+    function renderPalette() {
+        const grid = document.getElementById('paletteGrid');
+        if (!grid) return;
+        grid.innerHTML = "";
+        questionsBank.forEach((_, idx) => {
+            const btn = document.createElement('button');
+            btn.className = 'p-btn';
+            btn.innerText = idx + 1;
+            if(idx === currentQ) btn.classList.add('current');
+            if(qStatus[idx] === 'answered') btn.classList.add('answered');
+            else if(qStatus[idx] === 'review') btn.classList.add('review');
+            else if(qStatus[idx] === 'visited') btn.classList.add('visited');
+            btn.onclick = () => loadQuestion(idx);
+            grid.appendChild(btn);
+        });
+    }
+
+    document.addEventListener('visibilitychange', () => {
+        if(examActive && document.hidden) triggerSurveillanceStrike("Tab switch / focus blur detected!");
+    });
+
+    function logAudit(msg) {
+        const timestamp = new Date().toLocaleTimeString();
+        globalAuditLogs += `[${timestamp}] ${msg}<br>`;
+    }
+
+    function triggerSurveillanceStrike(reason) {
+        if(!examActive) return;
+        strikes++;
+        document.getElementById('strikeDisplay').innerText = strikes;
+        logAudit(`⚠️ Warning / Strike recorded: ${reason}`);
+
+        const rEl = document.getElementById('modalReason');
+        const modal = document.getElementById('securityModal');
+        if (rEl) rEl.innerText = `${reason} (Strike ${strikes}/15)`;
+        if (modal) modal.style.display = 'flex';
+    }
+
+    function resumeExam() {
+        const modal = document.getElementById('securityModal');
+        if (modal) modal.style.display = 'none';
+        document.documentElement.requestFullscreen?.().catch(()=>{});
+    }
+
+    function confirmFinalSubmit() {
+        if(confirm("Submit your examination paper?")) finalizeExam("Completed Normally");
+    }
+
+    function finalizeExam(statusNote) {
+        examActive = false;
+        clearInterval(timer);
+        if(document.fullscreenElement) document.exitFullscreen?.().catch(()=>{});
+        particlesActive = true;
+
+        let attempted = 0, unattempted = 0, correct = 0, incorrect = 0;
+        userAnswers.forEach((ans, idx) => {
+            if(ans !== null) {
+                attempted++;
+                if(ans === questionsBank[idx].correct) correct++;
+                else incorrect++;
+            } else {
+                unattempted++;
+            }
+        });
+
+        logAudit(`Status note: ${statusNote}`);
+
+        document.getElementById('sumName').innerText = currentCandidate ? currentCandidate.name : 'Candidate';
+        document.getElementById('sumAppNo').innerText = currentCandidate ? currentCandidate.appNo : 'N/A';
+        document.getElementById('sumTotal').innerText = questionsBank.length;
+        document.getElementById('sumAttempted').innerText = attempted;
+        document.getElementById('sumUnattempted').innerText = unattempted;
+        document.getElementById('sumCorrect').innerText = correct;
+        document.getElementById('sumIncorrect').innerText = incorrect;
+        document.getElementById('sumStrikes').innerText = `${strikes} warnings/alerts`;
+        document.getElementById('finalTelemetryLog').innerHTML = globalAuditLogs;
+
+        switchView('view-score');
+    }
+</script>
+</body>
+</html>
